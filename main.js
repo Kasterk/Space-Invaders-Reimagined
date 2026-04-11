@@ -1,3 +1,5 @@
+import EnemyController from "./EnemyController.js";
+
 const canvas = document.getElementById('board');
 const ctx = canvas.getContext('2d');
 
@@ -7,8 +9,11 @@ canvas.height = 700;
 const background = new Image();
 background.src = "Images/Background.jpg";
 
-function draw() {
+const enemyController = new EnemyController();
+
+function game() {
     ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
+    enemyController.draw(ctx);
 }
 
-setInterval(draw, 1000 / 60);
+setInterval(game, 1000 / 60);
