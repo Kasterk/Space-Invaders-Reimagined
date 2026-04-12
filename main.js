@@ -9,7 +9,7 @@ canvas.height = 700;
 const background = new Image();
 background.src = "Images/Background.jpg";
 
-const enemyController = new EnemyController();
+const enemyController = new EnemyController(canvas); // Fix 1: pass canvas
 
 function game() {
     ctx.drawImage(background, 0, 0, canvas.width, canvas.height);
