@@ -16,6 +16,8 @@ export default class BulletController {
     }
 
     draw(ctx) {
+        this.bullets = this.bullets.filter(bullet => bullet.y + bullet.width > 0 && bullet.y <= this.canvas.height); // filter out bullets that are off the screen
+
         this.bullets.forEach(bullet => bullet.draw(ctx));
         if (this.timeTillNextBulletAllowed > 0) {
             this.timeTillNextBulletAllowed--;
