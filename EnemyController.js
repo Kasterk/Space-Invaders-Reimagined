@@ -23,10 +23,16 @@ export default class EnemyController {
     fireBulletTimerDefault = 100;
     fireBulletTimer = this.fireBulletTimerDefault;
 
-    constructor(canvas, enemyBulletController, playerBulletController) { // Fix 2: add playerBulletController as parameter
+    level = 1;
+    speedIncrease = 4;
+    fireRateDecrease = 10;
+    minFireBulletTimerDefault = 20;
+
+    constructor(canvas, enemyBulletController, playerBulletController, onEnemyKilled) { // Fix 2: add playerBulletController as parameter
         this.canvas = canvas;
         this.enemyBulletController = enemyBulletController;
         this.playerBulletController = playerBulletController;
+        this.onEnemyKilled = onEnemyKilled;
 
         this.enemyDeathSound = new Audio("Sounds/enemy-death.wav");
         this.enemyDeathSound.volume = 0.1;
@@ -50,6 +56,9 @@ export default class EnemyController {
                     this.enemyDeathSound.currentTime = 0;
                     this.enemyDeathSound.play();
                     enemyRow.splice(enemyIndex, 1);
+                    if (this.onEnemyKilled) {
+                        this.onEnemyKilled();
+                    }
                 }
             });
         });
@@ -59,13 +68,13 @@ export default class EnemyController {
 
     fireBullet() {
         this.fireBulletTimer --;
-        if (this.fireBulletTimer <= 0) {
+        if (this.fireBulletTimer <= 0 && this.enemyRows.length > 0) {
             this.fireBulletTimer = this.fireBulletTimerDefault;
             const allEnemies = this.enemyRows.flat();
             const enemyIndex = Math.floor(Math.random() * allEnemies.length);
             const enemy = allEnemies[enemyIndex];
-            this.enemyBulletController.shoot(enemy.x + enemy.width / 2, enemy.y, -3);
-            console.log(enemyIndex);
+            const bulletSpeed = -(3 + this.level);
+            this.enemyBulletController.shoot(enemy.x + enemy.width / 2, enemy.y, bulletSpeed);
         }
     }
 
@@ -138,6 +147,7 @@ export default class EnemyController {
     }
 
     createEnemies() {
+        this.enemyRows = [];
         this.enemyMap.forEach((row, rowIndex) => {
             this.enemyRows[rowIndex] = [];
             row.forEach((enemyNumber, enemyIndex) => {
@@ -148,6 +158,16 @@ export default class EnemyController {
                 }
             });
         });
+    }
+
+    nextLevel() {
+        this.level++;
+        this.defaultXVelocity += this.speedIncrease;
+        this.fireBulletTimerDefault = Math.max(this.minFireBulletTimerDefault, this.fireBulletTimerDefault - this.fireRateDecrease);
+        this.fireBulletTimer = this.fireBulletTimerDefault;
+        this.currentDirection = MovingDirection.right;
+        this.moveDownTimer = this.moveDownTimerDefault;
+        this.createEnemies();
     }
 
     collideWith(sprite) {

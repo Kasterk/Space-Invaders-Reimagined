@@ -3,6 +3,37 @@ body {
     text-align: center;
 }
 
+#hud {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    color: white;
+    font-size: 20px;
+    margin-bottom: 15px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    align-items: center;
+}
+
+#pauseButton {
+    background-color: #444;
+    color: white;
+    border: 2px solid white;
+    padding: 8px 16px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    transition: background-color 0.2s;
+}
+
+#pauseButton:hover {
+    background-color: #666;
+}
+
+#pauseButton:active {
+    background-color: #333;
+}
+
 #board {
     background-color: black;
 }
