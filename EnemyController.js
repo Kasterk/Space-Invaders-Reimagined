@@ -24,7 +24,7 @@ export default class EnemyController {
     fireBulletTimer = this.fireBulletTimerDefault;
 
     level = 1;
-    speedIncrease = 4;
+    speedIncrease = 2;
     fireRateDecrease = 10;
     minFireBulletTimerDefault = 20;
 
