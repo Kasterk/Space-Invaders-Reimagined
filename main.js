@@ -15,7 +15,7 @@ canvas.height = 650;
 const background = new Image();
 background.src = "Images/Background.jpg";
 
-const playerBulletController = new BulletController(canvas, 8, "red", true); // pass canvas, amount of bullets, color and whether to play sound
+const playerBulletController = new BulletController(canvas, 10, "red", true); // pass canvas, amount of bullets, color and whether to play sound
 const enemyBulletController = new BulletController(canvas, 4, "white", false); // pass canvas, amount of bullets, color and whether to play sound
 const enemyController = new EnemyController(canvas, enemyBulletController, playerBulletController, () => score += 10); // Fix 1: pass canvas and enemy bullet controller
 const player = new Player(canvas, 3, playerBulletController); // pass canvas, velocity and player bullet controller
@@ -75,7 +75,10 @@ function checkGameOver() {
 
     if (enemyBulletController.collideWith(player)) {
         lives--;
-        if (lives <= 0) {
+        if (lives <= 0 && enemyController.level > 5) {
+            isGameOver = true;
+            didWin = true;
+        } else if (lives <= 0) {
             isGameOver = true;
         }
     }
@@ -90,7 +93,6 @@ function checkGameOver() {
     if (enemyController.enemyRows.length == 0) {
         score += 20;
         enemyController.nextLevel();
-        player.reduceShootCooldown(0.5);
     }
 }
 
