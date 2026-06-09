@@ -73,7 +73,8 @@ export default class EnemyController {
             const allEnemies = this.enemyRows.flat();
             const enemyIndex = Math.floor(Math.random() * allEnemies.length);
             const enemy = allEnemies[enemyIndex];
-            const bulletSpeed = -(3 + this.level);
+            const effectiveLevel = Math.min(this.level, 5);
+            const bulletSpeed = -(3 + effectiveLevel);
             this.enemyBulletController.shoot(enemy.x + enemy.width / 2, enemy.y, bulletSpeed);
         }
     }
@@ -148,7 +149,8 @@ export default class EnemyController {
 
     createEnemies() {
         this.enemyRows = [];
-        this.enemyMap.forEach((row, rowIndex) => {
+        const enemyMap = this.getEnemyPattern(this.level);
+        enemyMap.forEach((row, rowIndex) => {
             this.enemyRows[rowIndex] = [];
             row.forEach((enemyNumber, enemyIndex) => {
                 if (enemyNumber > 0) {
@@ -160,10 +162,60 @@ export default class EnemyController {
         });
     }
 
+    getEnemyPattern(level) {
+        if (level === 1) {
+            return this.enemyMap;
+        }
+
+        const rows = 5;
+        const cols = 8;
+        const holeChance = 0.08 + Math.min(3, level - 2) * 0.06;
+        const pattern = [];
+
+        for (let rowIndex = 0; rowIndex < rows; rowIndex++) {
+            const row = new Array(cols).fill(0);
+            for (let colIndex = 0; colIndex < cols / 2; colIndex++) {
+                let enemyType = 0;
+                if (Math.random() > holeChance) {
+                    enemyType = this.chooseEnemyType(rowIndex);
+                }
+                row[colIndex] = enemyType;
+                row[cols - 1 - colIndex] = enemyType;
+            }
+
+            if (row.every(value => value === 0)) {
+                row[3] = 1;
+                row[4] = 1;
+            }
+
+            pattern.push(row);
+        }
+
+        return pattern;
+    }
+
+    chooseEnemyType(rowIndex) {
+        if (rowIndex === 0 || rowIndex === 1) {
+            return this.weightedRandom([3, 3, 2, 2, 1]);
+        }
+        if (rowIndex === 2 || rowIndex === 3) {
+            return this.weightedRandom([2, 2, 1, 1, 1]);
+        }
+        return this.weightedRandom([1, 1, 1, 1, 2]);
+    }
+
+    weightedRandom(options) {
+        const index = Math.floor(Math.random() * options.length);
+        return options[index];
+    }
+
     nextLevel() {
         this.level++;
-        this.defaultXVelocity += this.speedIncrease;
-        this.fireBulletTimerDefault = Math.max(this.minFireBulletTimerDefault, this.fireBulletTimerDefault - this.fireRateDecrease);
+        // cap speed and fire-rate increases at level 5
+        if (this.level <= 5) {
+            this.defaultXVelocity += this.speedIncrease;
+            this.fireBulletTimerDefault = Math.max(this.minFireBulletTimerDefault, this.fireBulletTimerDefault - this.fireRateDecrease);
+        }
         this.fireBulletTimer = this.fireBulletTimerDefault;
         this.currentDirection = MovingDirection.right;
         this.moveDownTimer = this.moveDownTimerDefault;
