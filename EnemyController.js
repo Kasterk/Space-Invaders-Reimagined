@@ -35,7 +35,7 @@ export default class EnemyController {
         this.onEnemyKilled = onEnemyKilled;
 
         this.enemyDeathSound = new Audio("Sounds/enemy-death.wav");
-        this.enemyDeathSound.volume = 0.1;
+        this.enemyDeathSound.volume = 0.05;
 
         this.createEnemies();
     }

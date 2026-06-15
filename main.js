@@ -18,7 +18,7 @@ canvas.height = 650;
 const background = new Image();
 background.src = "Images/Background.jpg";
 
-const playerBulletController = new BulletController(canvas, 999, "red", true, 4, 0.3); // player uses cooldown-based shooting (start 0.3s)
+const playerBulletController = new BulletController(canvas, 999, "red", true, 4, 0.9); // player uses cooldown-based shooting (start 0.3s)
 const enemyBulletController = new BulletController(canvas, 4, "white", false, 3); // enemy bullets unchanged
 let enemyController = new EnemyController(canvas, enemyBulletController, playerBulletController, () => score += 10); // allow reassign on restart
 const player = new Player(canvas, 3, playerBulletController); // pass canvas, velocity and player bullet controller
@@ -79,8 +79,8 @@ function updateHUD() {
         playerBulletController.defaultBulletVelocity = 4 + (effectiveLevel * 0.5);
 
         // compute linear cooldown from 0.3s at level1 down to 0.1s at level5
-        const start = 0.3;
-        const end = 0.1;
+        const start = 0.5;
+        const end = 0.2;
         const cooldownSeconds = Math.max(end, start - (effectiveLevel - 1) * ((start - end) / 4));
         playerBulletController.cooldownFrames = Math.max(1, Math.round(cooldownSeconds * 60));
     }

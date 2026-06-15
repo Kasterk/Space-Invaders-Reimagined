@@ -51,25 +51,25 @@ export default class Player {
     }
 
     keydown = event =>{
-        if (event.code == "ArrowRight") {
+        if (event.code == "ArrowRight" || event.code == "KeyD") {
             this.rightPressed = true;
         }
-        if (event.code == "ArrowLeft") {
+        if (event.code == "ArrowLeft" || event.code == "KeyA") {
             this.leftPressed = true;
         }
-        if (event.code == "ArrowUp") {
+        if (event.code == "ArrowUp" || event.code == "KeyW") {
             this.shootPressed = true;
         }
     }
 
     keyup = event =>{
-        if (event.code == "ArrowRight") {
+        if (event.code == "ArrowRight" || event.code == "KeyD") {
             this.rightPressed = false;
         }
-        if (event.code == "ArrowLeft") {
+        if (event.code == "ArrowLeft" || event.code == "KeyA") {
             this.leftPressed = false;
         }
-        if (event.code == "ArrowUp") {
+        if (event.code == "ArrowUp" || event.code == "KeyW") {
             this.shootPressed = false;
         }
     }

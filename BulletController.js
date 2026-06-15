@@ -14,7 +14,7 @@ export default class BulletController {
         this.soundEnabled = soundEnabled;
 
         this.shootSound = new Audio("Sounds/shoot.wav");
-        this.shootSound.volume = 0.1;
+        this.shootSound.volume = 0.04;
 
         this.defaultBulletVelocity = defaultBulletVelocity;
         this.cooldownFrames = cooldownSeconds != null ? Math.round(cooldownSeconds * 60) : null;
